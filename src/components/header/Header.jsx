@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '../../assets/logo.png';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -7,10 +7,9 @@ const Header = () => {
       className="navbar navbar-expand-lg navbar-dark"
       style={{ background: '#D70F64' }}>
       <div className="container">
-        {/* <img className="navbar-brand" src={Logo} style={{ width: '6%' }} /> */}
-        <a href="/" className="navbar-brand">
+        <Link to="/" className="navbar-brand">
           Burger Builder
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -25,18 +24,12 @@ const Header = () => {
           className="collapse navbar-collapse justify-content-end"
           id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-link" href="/">
+            <Link className="nav-link" to="/">
               Home
-            </a>
-            <a className="nav-link" href="/about">
-              About
-            </a>
-            <a className="nav-link" href="/contact">
-              Contact
-            </a>
-            <a className="nav-link" href="/feedback">
-              Feedback
-            </a>
+            </Link>
+            <Link className="nav-link" to="/orders">
+              Orders
+            </Link>
           </div>
         </div>
       </div>
