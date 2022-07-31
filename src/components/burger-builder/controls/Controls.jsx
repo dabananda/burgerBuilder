@@ -29,8 +29,9 @@ const BuildControl = props => {
 };
 
 const Controls = props => {
-  const { price, isSummaryDisabled } = props;
+  const { price, purchaseable } = props;
   const { moreIngredientsHandler, lessIngredientsHandler, toggleModal } = props;
+  console.log(purchaseable);
 
   return (
     <div
@@ -54,7 +55,7 @@ const Controls = props => {
         <p>Price: {price} TK</p>
         <button
           className="btn btn-primary"
-          disabled={isSummaryDisabled}
+          disabled={purchaseable}
           onClick={toggleModal}>
           Order Summery
         </button>

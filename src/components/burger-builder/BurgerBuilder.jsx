@@ -4,65 +4,40 @@ import Burger from './burger/Burger';
 import Controls from './controls/Controls';
 import Summary from './summary/Summary';
 import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {
+  lessIngredients,
+  moreIngredients,
+  updatePurchaseable,
+} from '../../redux/actionCreators';
+
+const mapStateToProps = state => {
+  return {
+    ingredients: state.ingredients,
+    price: state.price,
+    purchaseable: state.purchaseable,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    moreIngredients: ingredient => dispatch(moreIngredients(ingredient)),
+    lessIngredients: ingredient => dispatch(lessIngredients(ingredient)),
+    updatePurchaseable: () => dispatch(updatePurchaseable()),
+  };
+};
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: [
-      { type: 'cheese', amount: 0 },
-      { type: 'meat', amount: 0 },
-      { type: 'salad', amount: 0 },
-    ],
-    price: 0,
     isModalOpen: false,
-    isSummaryDisabled: true,
-  };
-
-  PRICES = {
-    cheese: 30,
-    meat: 80,
-    salad: 20,
-  };
-
-  isSummaryDisabledHandler = ingredients => {
-    const sum = ingredients.reduce((sum, element) => {
-      return (sum += element.amount);
-    }, 0);
-
-    this.setState({
-      isSummaryDisabled: !(sum > 0),
-    });
   };
 
   moreIngredientsHandler = type => {
-    const items = [...this.state.ingredients];
-    const newPrice = this.state.price + this.PRICES[type];
-    for (let item of items) {
-      if (item.type === type) {
-        item.amount++;
-      }
-    }
-    this.setState({
-      ingredients: items,
-      price: newPrice,
-    });
-    this.isSummaryDisabledHandler(items);
+    this.props.moreIngredients(type), this.props.updatePurchaseable();
   };
 
   lessIngredientsHandler = type => {
-    const items = [...this.state.ingredients];
-    let newPrice;
-    for (let item of items) {
-      if (item.type === type) {
-        if (item.amount <= 0) return;
-        item.amount--;
-        newPrice = this.state.price - this.PRICES[type];
-      }
-    }
-    this.setState({
-      ingredients: items,
-      price: newPrice,
-    });
-    this.isSummaryDisabledHandler(items);
+    this.props.lessIngredients(type), this.props.updatePurchaseable();
   };
 
   toggleModal = () => {
@@ -71,21 +46,18 @@ class BurgerBuilder extends Component {
     });
   };
 
-  checkout = () => {
-    // let navigate = useNavigate()
+  checkoutHandler = () => {
     this.props.navigate('/checkout');
   };
 
   render() {
-    const { ingredients, isSummaryDisabled } = this.state;
-
     return (
       <div>
         <div className="container d-flex flex-md-row flex-column">
-          <Burger ingredients={ingredients} />
+          <Burger ingredients={this.props.ingredients} />
           <Controls
-            price={this.state.price}
-            isSummaryDisabled={isSummaryDisabled}
+            price={this.props.price}
+            purchaseable={this.props.purchaseable}
             moreIngredientsHandler={this.moreIngredientsHandler}
             lessIngredientsHandler={this.lessIngredientsHandler}
             toggleModal={this.toggleModal}
@@ -94,11 +66,11 @@ class BurgerBuilder extends Component {
         <Modal isOpen={this.state.isModalOpen}>
           <ModalHeader>Your Order Summery</ModalHeader>
           <ModalBody>
-            <h5>Total Price: {this.state.price.toFixed(0)}</h5>
-            <Summary ingredients={ingredients} />
+            <h5>Total Price: {this.props.price.toFixed(0)}</h5>
+            <Summary ingredients={this.props.ingredients} />
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" onClick={this.checkout}>
+            <button className="btn btn-primary" onClick={this.checkoutHandler}>
               Continue
             </button>
             <button className="btn btn-danger" onClick={this.toggleModal}>
@@ -111,14 +83,10 @@ class BurgerBuilder extends Component {
   }
 }
 
-// function WithNavigate(props) {
-//   let navigate = useNavigate();
-//   return <BurgerBuilder {...props} navigate={navigate} />;
-// }
-
 // export default BurgerBuilder;
-
-export default function (props) {
+function navigation(props) {
   const navigate = useNavigate();
   return <BurgerBuilder {...props} navigate={navigate} />;
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(navigation);
