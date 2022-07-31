@@ -14,12 +14,13 @@ const BuildControl = props => {
       <div>{props.label}</div>
       <div>
         <button
-          className="btn btn-success mx-1"
-          onClick={moreIngredientsHandler}>
+          className="btn mx-1"
+          onClick={moreIngredientsHandler}
+          style={{ backgroundColor: '#D70F64', color: '#fff' }}>
           More
         </button>
         <button
-          className="btn btn-danger mx-1"
+          className="btn btn-secondary mx-1"
           onClick={lessIngredientsHandler}>
           Less
         </button>
@@ -31,35 +32,35 @@ const BuildControl = props => {
 const Controls = props => {
   const { price, purchaseable } = props;
   const { moreIngredientsHandler, lessIngredientsHandler, toggleModal } = props;
-  console.log(purchaseable);
 
   return (
-    <div
-      className="card text-center w-75 my-5 mx-auto text-light"
-      style={{ background: '#D70F64' }}>
-      <div className="card-header">Add Ingredients</div>
-      <div className="card-body bg-light">
-        {controls.map(item => {
-          return (
-            <BuildControl
-              label={item.label}
-              type={item.type}
-              key={Math.random()}
-              moreIngredientsHandler={() => moreIngredientsHandler(item.type)}
-              lessIngredientsHandler={() => lessIngredientsHandler(item.type)}
-            />
-          );
-        })}
+    <div>
+      <div
+        className="card text-center mt-5 mx-auto text-light"
+        style={{ background: '#D70F64' }}>
+        <div className="card-header">Add Ingredients</div>
+        <div className="card-body p-2 bg-light">
+          {controls.map(item => {
+            return (
+              <BuildControl
+                label={item.label}
+                type={item.type}
+                key={Math.random()}
+                moreIngredientsHandler={() => moreIngredientsHandler(item.type)}
+                lessIngredientsHandler={() => lessIngredientsHandler(item.type)}
+              />
+            );
+          })}
+        </div>
+        <div className="card-footer text-light">Price: {price} TK</div>
       </div>
-      <div className="card-footer text-light">
-        <p>Price: {price} TK</p>
-        <button
-          className="btn btn-primary"
-          disabled={purchaseable}
-          onClick={toggleModal}>
-          Order Summery
-        </button>
-      </div>
+      <button
+        className="btn my-2 d-block w-100"
+        disabled={purchaseable}
+        onClick={toggleModal}
+        style={{ backgroundColor: '#D70F64', color: '#fff' }}>
+        Order Summary
+      </button>
     </div>
   );
 };

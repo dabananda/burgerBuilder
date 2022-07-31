@@ -52,16 +52,20 @@ class BurgerBuilder extends Component {
 
   render() {
     return (
-      <div>
-        <div className="container d-flex flex-md-row flex-column">
-          <Burger ingredients={this.props.ingredients} />
-          <Controls
-            price={this.props.price}
-            purchaseable={this.props.purchaseable}
-            moreIngredientsHandler={this.moreIngredientsHandler}
-            lessIngredientsHandler={this.lessIngredientsHandler}
-            toggleModal={this.toggleModal}
-          />
+      <div className="container">
+        <div className="row ">
+          <div className="col-md-8">
+            <Burger ingredients={this.props.ingredients} />
+          </div>
+          <div className="col-md-4">
+            <Controls
+              price={this.props.price}
+              purchaseable={this.props.purchaseable}
+              moreIngredientsHandler={this.moreIngredientsHandler}
+              lessIngredientsHandler={this.lessIngredientsHandler}
+              toggleModal={this.toggleModal}
+            />
+          </div>
         </div>
         <Modal isOpen={this.state.isModalOpen}>
           <ModalHeader>Your Order Summery</ModalHeader>
@@ -70,10 +74,13 @@ class BurgerBuilder extends Component {
             <Summary ingredients={this.props.ingredients} />
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" onClick={this.checkoutHandler}>
+            <button
+              className="btn "
+              onClick={this.checkoutHandler}
+              style={{ backgroundColor: '#D70F64', color: "#fff" }}>
               Continue
             </button>
-            <button className="btn btn-danger" onClick={this.toggleModal}>
+            <button className="btn btn-secondary" onClick={this.toggleModal}>
               Cancel
             </button>
           </ModalFooter>

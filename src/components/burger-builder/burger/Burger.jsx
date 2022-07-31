@@ -21,7 +21,13 @@ const Burger = props => {
   }
 
   return (
-    <div className="my-5">
+    <div
+      className="my-5 overflow-auto"
+      style={{
+        maxHeight: '300px',
+        overflowY: 'hidden',
+        scrollbarWidth: 'none',
+      }}>
       <Ingredient type="bread-top" />
       {innerIngredients}
       <Ingredient type="bread-bottom" />
