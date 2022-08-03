@@ -1,5 +1,24 @@
+import axios from 'axios';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Modal, ModalBody } from 'reactstrap';
+import Spinner from '../../spinner/Spinner';
+import { resetIngredients } from '../../../redux/actionCreators';
+
+const mapStateToProps = state => {
+  return {
+    ingredients: state.ingredients,
+    price: state.price,
+    purchaseable: state.purchaseable,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    resetIngredients: () => dispatch(resetIngredients()),
+  };
+};
 
 class Checkout extends Component {
   state = {
@@ -8,6 +27,9 @@ class Checkout extends Component {
       phone: '',
       paymentType: 'Cash On Delivery',
     },
+    isLoading: false,
+    isOpen: false,
+    modalMessage: '',
   };
 
   goBackHandler = () => {
@@ -25,12 +47,51 @@ class Checkout extends Component {
 
   submitHandler = event => {
     event.preventDefault();
+    this.setState({
+      isLoading: true,
+    });
+    const orderDetails = {
+      ingredients: this.props.ingredients,
+      price: this.props.price,
+      customer: this.state.values,
+      time: new Date(),
+    };
+
+    // creating orderDetails on google firebase
+    axios
+      .post(
+        'https://burger-builder-c9b33-default-rtdb.asia-southeast1.firebasedatabase.app/orderDetails.json',
+        orderDetails
+      )
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({
+            isLoading: false,
+            isOpen: true,
+            modalMessage: 'Orderd Successfully 🤩',
+          });
+          this.props.resetIngredients();
+        } else {
+          this.setState({
+            isLoading: false,
+            isOpen: true,
+            modalMessage: 'Something went wrong!!! Please order again.',
+          });
+        }
+      })
+      .catch(() => {
+        this.setState({
+          isLoading: false,
+          isOpen: true,
+          modalMessage: 'Something went wrong!!! Please order again.',
+        });
+      });
   };
 
   render() {
-    return (
-      <div className="container">
-        <h3 className="mb-4 mt-3">Checkout</h3>
+    const form = (
+      <div>
+        <h3 className="my-3">Total: {this.props.price} TK</h3>
         <form>
           <select
             name="paymentType"
@@ -70,10 +131,23 @@ class Checkout extends Component {
           <button
             className="btn"
             onClick={event => this.submitHandler(event)}
+            disabled={this.props.purchaseable}
             style={{ backgroundColor: '#D70F64', color: '#fff' }}>
             Place Order
           </button>
         </form>
+      </div>
+    );
+
+    return (
+      <div className="container">
+        {this.state.isLoading ? <Spinner /> : form}
+        <Modal
+          isOpen={this.state.isOpen}
+          centered={true}
+          onClick={this.goBackHandler}>
+          <ModalBody>{this.state.modalMessage}</ModalBody>
+        </Modal>
       </div>
     );
   }
@@ -84,4 +158,4 @@ function navigator(props) {
   return <Checkout {...props} navigate={navigate} />;
 }
 
-export default navigator;
+export default connect(mapStateToProps, mapDispatchToProps)(navigator);
