@@ -2,6 +2,16 @@ import { Formik } from 'formik';
 import React, { Component } from 'react';
 
 class Auth extends Component {
+  state = {
+    mode: 'Sign Up',
+  };
+
+  modeSwitchHandler = () => {
+    this.setState({
+      mode: this.state.mode === 'Sign Up' ? 'Log In' : 'Sign Up',
+    });
+  };
+
   render() {
     return (
       <div className="container">
@@ -28,16 +38,18 @@ class Auth extends Component {
             } else if (values.password.length < 4) {
               errors.password = 'Password should be atleast 4 characters long';
             }
-            if (!values.confirmPassword) {
-              errors.confirmPassword = 'Required';
-            } else if (values.password !== values.confirmPassword) {
-              errors.confirmPassword = "Password didn't match";
+            if (this.state.mode === 'Sign Up') {
+              if (!values.confirmPassword) {
+                errors.confirmPassword = 'Required';
+              } else if (values.password !== values.confirmPassword) {
+                errors.confirmPassword = "Password didn't match";
+              }
             }
             return errors;
           }}>
           {({ values, handleChange, handleSubmit, errors }) => (
-            <div>
-              <form className="w-75 mx-auto mt-5" onSubmit={handleSubmit}>
+            <div className="mt-3 w-75 mx-auto">
+              <form onSubmit={handleSubmit}>
                 <div className="form-floating mb-3">
                   <input
                     name="email"
@@ -62,25 +74,34 @@ class Auth extends Component {
                   <label>Password</label>
                   <span className="text-danger">{errors.password}</span>
                 </div>
-                <div className="form-floating mb-3">
-                  <input
-                    name="confirmPassword"
-                    type="password"
-                    className="form-control"
-                    placeholder="Password"
-                    value={values.confirmPassword}
-                    onChange={handleChange}
-                  />
-                  <label>Confirm Password</label>
-                  <span className="text-danger">{errors.confirmPassword}</span>
-                </div>
+                {this.state.mode === 'Sign Up' ? (
+                  <div className="form-floating mb-3">
+                    <input
+                      name="confirmPassword"
+                      type="password"
+                      className="form-control"
+                      placeholder="Password"
+                      value={values.confirmPassword}
+                      onChange={handleChange}
+                    />
+                    <label>Confirm Password</label>
+                    <span className="text-danger">
+                      {errors.confirmPassword}
+                    </span>
+                  </div>
+                ) : null}
                 <button
                   type="submit"
-                  className="btn btn-lg w-100"
+                  className="btn btn-lg w-100 mb-3"
                   style={{ backgroundColor: '#D70F64', color: '#fff' }}>
-                  Sign Up
+                  {this.state.mode === 'Sign Up' ? 'Sign Up' : 'Log In'}
                 </button>
               </form>
+              <button
+                className="btn mb-3 w-100"
+                onClick={this.modeSwitchHandler}>
+                Switch to {this.state.mode === 'Sign Up' ? 'Log In' : 'Sign Up'}
+              </button>
             </div>
           )}
         </Formik>

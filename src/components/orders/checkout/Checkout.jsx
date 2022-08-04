@@ -20,6 +20,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+
 class Checkout extends Component {
   state = {
     values: {
@@ -87,6 +88,7 @@ class Checkout extends Component {
         });
       });
   };
+
 
   render() {
     const form = (
