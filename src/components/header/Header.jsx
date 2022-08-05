@@ -1,7 +1,34 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const mapStateToProps = state => {
+  return {
+    token: state.token,
+  };
+};
+
+const Header = props => {
+  const { token } = props;
+  let navLinks = null;
+  if (token === null) {
+    navLinks = (
+      <Link className="nav-link" to="/login">
+        Login
+      </Link>
+    );
+  } else {
+    navLinks = (
+      <div>
+        <Link className="nav-link" to="/">
+          Home
+        </Link>
+        <Link className="nav-link" to="/orders">
+          Orders
+        </Link>
+      </div>
+    );
+  }
   return (
     <nav
       className="navbar navbar-expand-lg navbar-dark"
@@ -23,73 +50,11 @@ const Header = () => {
         <div
           className="collapse navbar-collapse justify-content-end"
           id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <Link className="nav-link" to="/">
-              Home
-            </Link>
-            <Link className="nav-link" to="/orders">
-              Orders
-            </Link>
-            <Link className="nav-link" to="/login">
-              Login
-            </Link>
-          </div>
+          <div className="navbar-nav">{navLinks}</div>
         </div>
       </div>
     </nav>
   );
 };
 
-export default Header;
-
-// import React, { useState } from 'react';
-// import {
-//   Collapse,
-//   Navbar,
-//   NavbarToggler,
-//   NavbarBrand,
-//   Nav,
-//   NavItem,
-//   NavLink,
-//   UncontrolledDropdown,
-//   DropdownToggle,
-//   DropdownMenu,
-//   DropdownItem,
-//   NavbarText,
-// } from 'reactstrap';
-
-// const Header = args => {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   const toggle = () => setIsOpen(!isOpen);
-
-//   return (
-//     <div style={{ background: '#D70F64', }}>
-//       <Navbar {...args} dark container="md">
-//         <NavbarBrand href="/">Burger Builder</NavbarBrand>
-//         <NavbarToggler onClick={toggle} />
-//         <Collapse isOpen={isOpen} navbar>
-//           <Nav className="me-auto" navbar>
-//             <NavItem>
-//               <NavLink href="/home">Home</NavLink>
-//             </NavItem>
-//             <NavItem>
-//               <NavLink href="/burger-builder">Burger Builder</NavLink>
-//             </NavItem>
-//             <NavItem>
-//               <NavLink href="/about">About</NavLink>
-//             </NavItem>
-//             <NavItem>
-//               <NavLink href="/feedback">Feedback</NavLink>
-//             </NavItem>
-//             <NavItem>
-//               <NavLink href="/contact">Contact</NavLink>
-//             </NavItem>
-//           </Nav>
-//         </Collapse>
-//       </Navbar>
-//     </div>
-//   );
-// };
-
-// export default Header;
+export default connect(mapStateToProps)(Header);
