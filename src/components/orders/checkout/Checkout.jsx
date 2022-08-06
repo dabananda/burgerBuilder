@@ -11,6 +11,8 @@ const mapStateToProps = state => {
     ingredients: state.ingredients,
     price: state.price,
     purchaseable: state.purchaseable,
+    userId: state.userId,
+    token: state.token,
   };
 };
 
@@ -19,7 +21,6 @@ const mapDispatchToProps = dispatch => {
     resetIngredients: () => dispatch(resetIngredients()),
   };
 };
-
 
 class Checkout extends Component {
   state = {
@@ -56,12 +57,14 @@ class Checkout extends Component {
       price: this.props.price,
       customer: this.state.values,
       time: new Date(),
+      userId: this.props.userId,
     };
 
     // creating orderDetails on google firebase
     axios
       .post(
-        'https://burger-builder-c9b33-default-rtdb.asia-southeast1.firebasedatabase.app/orderDetails.json',
+        'https://burger-builder-c9b33-default-rtdb.asia-southeast1.firebasedatabase.app/orderDetails.json?auth=' +
+          this.props.token,
         orderDetails
       )
       .then(response => {
@@ -88,7 +91,6 @@ class Checkout extends Component {
         });
       });
   };
-
 
   render() {
     const form = (
