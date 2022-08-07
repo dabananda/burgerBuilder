@@ -11,8 +11,8 @@ const mapStateToProps = state => {
     ingredients: state.ingredients,
     price: state.price,
     purchaseable: state.purchaseable,
-    userId: state.userId,
     token: state.token,
+    userId: state.userId,
   };
 };
 

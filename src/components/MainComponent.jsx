@@ -42,7 +42,7 @@ class MainComponent extends Component {
           <Route path="/" element={<BurgerBuilder />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/logout" element={<LogOut />} />
+          <Route path="/logout/*" element={<LogOut />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       );

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { auth } from '../../redux/authActionCreators';
 import Spinner from '../spinner/Spinner';
+import './auth.css'
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -79,7 +80,7 @@ class Auth extends Component {
             return errors;
           }}>
           {({ values, handleChange, handleSubmit, errors }) => (
-            <div className="mt-3 w-75 mx-auto">
+            <div className="mt-3 mx-auto">
               <form onSubmit={handleSubmit}>
                 <div className="form-floating mb-3">
                   <input
@@ -139,7 +140,7 @@ class Auth extends Component {
       );
     }
     return (
-      <div className="container">
+      <div className="container auth">
         {error}
         {form}
       </div>

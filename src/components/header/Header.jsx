@@ -19,7 +19,7 @@ const Header = props => {
     );
   } else {
     navLinks = (
-      <div>
+      <>
         <Link className="nav-link" to="/">
           Home
         </Link>
@@ -29,7 +29,7 @@ const Header = props => {
         <Link className="nav-link" to="/logout">
           Log Out
         </Link>
-      </div>
+      </>
     );
   }
   return (
